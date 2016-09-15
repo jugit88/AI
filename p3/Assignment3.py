@@ -31,35 +31,17 @@ class Graph:
 		else:
 			adjlst = self.verticies[value1]
 			adjlst.append((value2,dist))
-	def aStar(self,start,end):
-		self.Open.append(start)
-		closed = []
-		while not self.Open:
-			node = min(self.Open)
-			self.Open.remove(node)
-			if node != end:
-				closed.append(node)
-				for n in self.verticies[node]:
-					if n not in closed:
-						fn = n[1] + self.heurVal[n]
-						print fn
-						n.parent = node
-						if n in Open:
-							print fn
-						else:
-							self.Open.append(n)
-			else:
-				break
-	def getMin(self,node):
-		Min = min(self.verticies[node])
-		dist = sys.maxint
-		if self.verticies[Min[0]] == []:
-			for v in self.verticies[node]:
-				if v[1] < dist and self.verticies[v[0]] != []:
-					dist = v[1]
-					Min = v
-		# print Min
-		return Min
+	
+	# def getMin(self,node):
+	# 	Min = min(self.verticies[node])
+	# 	dist = sys.maxint
+	# 	if self.verticies[Min[0]] == []:
+	# 		for v in self.verticies[node]:
+	# 			if v[1] < dist and self.verticies[v[0]] != []:
+	# 				dist = v[1]
+	# 				Min = v
+	# 	# print Min
+	# 	return Min
 
 	def Dijkstra(self,start,end):
 		if start == None or end == None:
@@ -68,14 +50,16 @@ class Graph:
 			return
 		distance = 0
 		distList = []
-		# minDist = sys.maxint
 		solved = [start]
 		while (end not in solved):
 			minDist = sys.maxint
 			solvedV = None
 			for s in solved:
+				if s == end:
+					break
 				minVertex = min(self.verticies[s])
 				dist1 = sys.maxint
+				# if vertex leads to dead end due to tiebreaker
 				if self.verticies[minVertex[0]] == []:
 					for v in self.verticies[s]:
 						if v[1] < dist1 and self.verticies[v[0]] != []:
@@ -89,9 +73,55 @@ class Graph:
 						minDist = dist
 						distance = dist
 						solved.append(solvedV)
-						print solved
-						print minDist					
-				
+		return (solved,minDist)
+		# print solved
+		# print minDist					
+
+	def getFn(self,node):
+		dist = sys.maxint
+		fPair = None
+		for i in self.verticies[node]:
+			# if self.verticies[i[0]] == []:
+			# 	for j in self.verticies[node]:
+			# 		if j[1] + self.heurVal[j[0]] < dist 
+			# print self.verticies[i[0]]
+			if i[0] == 'F':
+				dist = i[1] + self.heurVal[i[0]]
+				fPair = (i[0],dist,i[1])
+			if i[1] + self.heurVal[i[0]] < dist and self.verticies[i[0]] != []:
+				dist = i[1] + self.heurVal[i[0]]
+				fPair = (i[0],dist,i[1])
+		return fPair
+	def aStar(self,start,end):
+		if start == None or end == None:
+			return
+		if self.verticies[start] == None:
+			return
+		distance = 0
+		distance1 = 0
+		distList = []
+		solved = [start]
+		while (end not in solved):
+			minDist = sys.maxint
+			minDist1 = sys.maxint
+			solvedV = None
+			for s in solved:
+				if s == end:
+					break
+				minVertex = self.getFn(s)
+				if minVertex[0] not in solved:
+					dist = minVertex[1] + distance
+					dist1 = minVertex[2] + distance1
+					if (dist < minDist):
+						solvedV = minVertex[0]
+						minDist = dist
+						distance = dist
+						minDist1 = dist1
+						distance1 = dist1
+						solved.append(solvedV)
+		return (solved,minDist1)
+		# print solved
+		# print minDist1					
 
 
 def fetchData():
@@ -106,16 +136,29 @@ def fetchData():
 			vertex.append((contents[i][0],int(contents[i][2:])))
 		else:	
 			edge.append((contents[i][1],contents[i][3],int(contents[i][5])))
+			# edge.append((contents[i][3],contents[i][1],int(contents[i][5])))
 	# print edge
 	f.close()
+
 fetchData()
 g = Graph()
 for i in range(0,len(vertex)):
 	g.addVertex(vertex[i][0],vertex[i][1])
 for i in range(0,len(edge)):
 	g.addEdge(edge[i][0],edge[i][1],edge[i][2])
-# print vertex
-# g.findVertex('S')
-# g.getMin('R')
-g.Dijkstra('S','F')
+def prettyPrint():
+
+	dpath = g.Dijkstra('S','F')
+	dpath1 = str(dpath[0])
+	dpath1 = dpath1.replace(',',' ->')
+	apath = g.aStar('S','F')
+	apath1 = str(dpath[0])
+	apath1 = apath1.replace(',',' ->')
+
+	print 'Shortest path Algorithms'
+	print 'Path | Distance | Nodes Evaluated'
+	print 'Dijkstra:',dpath1 + ' |', dpath[1], '|',len(dpath[0])
+	print 'A*:', apath1 + ' |', apath[1], '|',len(apath[0])
+prettyPrint()
+
 # print edge
