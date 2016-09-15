@@ -6,7 +6,9 @@ class Graph:
 	   self.verticies = {}
 	   self.heurVal = {}
 	   self.Open = []
-	   self.parent = None
+	   # self.parent = None
+	   self.solved = False
+	   self.distance = 0
 
 
 	def addVertex(self, value,estDist):
@@ -48,10 +50,48 @@ class Graph:
 							self.Open.append(n)
 			else:
 				break
-	def f(self,n):
-		# for i in self.verticies[n]:
-			# fn = i[1] + i.heurVal
-			print self.heurVal[n]
+	def getMin(self,node):
+		Min = min(self.verticies[node])
+		dist = sys.maxint
+		if self.verticies[Min[0]] == []:
+			for v in self.verticies[node]:
+				if v[1] < dist and self.verticies[v[0]] != []:
+					dist = v[1]
+					Min = v
+		# print Min
+		return Min
+
+	def Dijkstra(self,start,end):
+		if start == None or end == None:
+			return
+		if self.verticies[start] == None:
+			return
+		distance = 0
+		distList = []
+		# minDist = sys.maxint
+		solved = [start]
+		while (end not in solved):
+			minDist = sys.maxint
+			solvedV = None
+			for s in solved:
+				minVertex = min(self.verticies[s])
+				dist1 = sys.maxint
+				if self.verticies[minVertex[0]] == []:
+					for v in self.verticies[s]:
+						if v[1] < dist1 and self.verticies[v[0]] != []:
+							dist = v[1]
+							minVertex = v
+				# minVertex = node.getMin(self.verticies[s])
+				if minVertex[0] not in solved:
+					dist = minVertex[1] + distance 
+					if (dist < minDist):
+						solvedV = minVertex[0]
+						minDist = dist
+						distance = dist
+						solved.append(solvedV)
+						print solved
+						print minDist					
+				
 
 
 def fetchData():
@@ -76,6 +116,6 @@ for i in range(0,len(edge)):
 	g.addEdge(edge[i][0],edge[i][1],edge[i][2])
 # print vertex
 # g.findVertex('S')
-g.aStar('A','D')
-# g.f('C')
+# g.getMin('R')
+g.Dijkstra('S','F')
 # print edge
