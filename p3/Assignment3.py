@@ -3,7 +3,7 @@ edge = []
 vertex = []
 class Graph:
 	def __init__(self):
-	   self.verticies = {}
+	   self.vertices = {}
 	   self.heurVal = {}
 	   self.Open = []
 	   # self.parent = None
@@ -13,31 +13,31 @@ class Graph:
 
 	def addVertex(self, value,estDist):
 		#check if value already exists
-		if value in self.verticies:
+		if value in self.vertices:
 			print "Vertex already exists"
 		else:
-			self.verticies[value] = []
+			self.vertices[value] = []
 			self.heurVal[value] = estDist
 
 	def findVertex(self,value):
-		if value in self.verticies:
-			print self.verticies[value], self.heurVal
+		if value in self.vertices:
+			print self.vertices[value], self.heurVal
 		else:
 			print("Not found.")
 	def addEdge(self, value1, value2,dist):
 		a = Graph()
-		if value1 not in self.verticies or value2 not in self.verticies:
+		if value1 not in self.vertices or value2 not in self.vertices:
 			print "One or more vertices not found."
 		else:
-			adjlst = self.verticies[value1]
+			adjlst = self.vertices[value1]
 			adjlst.append((value2,dist))
 	
 	# def getMin(self,node):
-	# 	Min = min(self.verticies[node])
+	# 	Min = min(self.vertices[node])
 	# 	dist = sys.maxint
-	# 	if self.verticies[Min[0]] == []:
-	# 		for v in self.verticies[node]:
-	# 			if v[1] < dist and self.verticies[v[0]] != []:
+	# 	if self.vertices[Min[0]] == []:
+	# 		for v in self.vertices[node]:
+	# 			if v[1] < dist and self.vertices[v[0]] != []:
 	# 				dist = v[1]
 	# 				Min = v
 	# 	# print Min
@@ -46,7 +46,7 @@ class Graph:
 	def Dijkstra(self,start,end):
 		if start == None or end == None:
 			return
-		if self.verticies[start] == None:
+		if self.vertices[start] == None:
 			return
 		distance = 0
 		distList = []
@@ -57,15 +57,15 @@ class Graph:
 			for s in solved:
 				if s == end:
 					break
-				minVertex = min(self.verticies[s])
+				minVertex = min(self.vertices[s])
 				dist1 = sys.maxint
 				# if vertex leads to dead end due to tiebreaker
-				if self.verticies[minVertex[0]] == []:
-					for v in self.verticies[s]:
-						if v[1] < dist1 and self.verticies[v[0]] != []:
+				if self.vertices[minVertex[0]] == []:
+					for v in self.vertices[s]:
+						if v[1] < dist1 and self.vertices[v[0]] != []:
 							dist = v[1]
 							minVertex = v
-				# minVertex = node.getMin(self.verticies[s])
+				# minVertex = node.getMin(self.vertices[s])
 				if minVertex[0] not in solved:
 					dist = minVertex[1] + distance 
 					if (dist < minDist):
@@ -80,22 +80,23 @@ class Graph:
 	def getFn(self,node):
 		dist = sys.maxint
 		fPair = None
-		for i in self.verticies[node]:
-			# if self.verticies[i[0]] == []:
-			# 	for j in self.verticies[node]:
+		for i in self.vertices[node]:
+			# if self.vertices[i[0]] == []:
+			# 	for j in self.vertices[node]:
 			# 		if j[1] + self.heurVal[j[0]] < dist 
-			# print self.verticies[i[0]]
+			# print self.vertices[i[0]]
 			if i[0] == 'F':
 				dist = i[1] + self.heurVal[i[0]]
 				fPair = (i[0],dist,i[1])
-			if i[1] + self.heurVal[i[0]] < dist and self.verticies[i[0]] != []:
+			if i[1] + self.heurVal[i[0]] < dist and self.vertices[i[0]] != []:
 				dist = i[1] + self.heurVal[i[0]]
 				fPair = (i[0],dist,i[1])
+		# print fPair
 		return fPair
 	def aStar(self,start,end):
 		if start == None or end == None:
 			return
-		if self.verticies[start] == None:
+		if self.vertices[start] == None:
 			return
 		distance = 0
 		distance1 = 0
@@ -118,6 +119,7 @@ class Graph:
 						distance = dist
 						minDist1 = dist1
 						distance1 = dist1
+						# print minDist1
 						solved.append(solvedV)
 		return (solved,minDist1)
 		# print solved
@@ -152,13 +154,12 @@ def prettyPrint():
 	dpath1 = str(dpath[0])
 	dpath1 = dpath1.replace(',',' ->')
 	apath = g.aStar('S','F')
-	apath1 = str(dpath[0])
+	apath1 = str(apath[0])
 	apath1 = apath1.replace(',',' ->')
 
 	print 'Shortest path Algorithms'
-	print 'Path | Distance | Nodes Evaluated'
-	print 'Dijkstra:',dpath1 + ' |', dpath[1], '|',len(dpath[0])
-	print 'A*:', apath1 + ' |', apath[1], '|',len(apath[0])
+	print 'Path | Nodes Evaluated'
+	print 'Dijkstra:',dpath1 + ' |', len(dpath[0])
+	print 'A*:', apath1 + ' |', len(apath[0])
 prettyPrint()
 
-# print edge
