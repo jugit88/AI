@@ -6,6 +6,7 @@ from __future__ import division
 import sys
 from random import randint,choice
 from collections import defaultdict
+import math
 
 
 class Sim_Annealing:
@@ -13,7 +14,7 @@ class Sim_Annealing:
 		self.district = defaultdict(list)
 		self.dragon = False
 		self.matrix = [[0 for x in range(state_size)] for y in range(state_size)]
-		# self.marked = False
+		self.marked = False
 		self.district_num = 0
 		self.adjlst = []
 	def generate_districts(self,state_size):
@@ -21,8 +22,10 @@ class Sim_Annealing:
 		# check to see if the node is marked and the random index doesn't hit edge/corner cases
 		x = randint(0,state_size-1)
 		y = randint(0,state_size-1)
+		# print x,y
 		
-		print x,y
+		
+		# print x,y
 		old_district = self.matrix[x][y].district_num
 		# print self.district[old_district]
 		# print self.district[old_district][:][:]
@@ -35,7 +38,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -51,9 +54,11 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 				
 			# print self.district[old_district]
 		elif x == 0 and y != state_size-1 and y != state_size-1:
@@ -64,7 +69,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -80,9 +85,11 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 			# print self.district[new_district]
 		elif x == 0 and y == state_size-1:
 			lst = [(1,0),(0,-1)]
@@ -92,7 +99,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -108,10 +115,11 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
-
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 				# print self.district[old_district]
 		elif x == state_size-1 and y == 0:
 			lst = [(0,1),(-1,0)]
@@ -121,7 +129,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -137,9 +145,11 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 		elif x == state_size-1 and y == state_size-1:
 			lst = [(0,-1),(-1,0)]
 			rm = []
@@ -148,7 +158,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -164,10 +174,11 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
-
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 		elif x == state_size-1 and y != 0 and y != state_size-1:
 			lst = [(0,1),(0,-1),(-1,0)]
 			rm = []
@@ -176,7 +187,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -192,9 +203,11 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 		elif x != 0 and x != state_size-1 and y == 0:
 			lst = [(0,1),(-1,0),(1,0)]
 			rm = []
@@ -203,7 +216,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -219,10 +232,11 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
-		
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 		elif x != state_size-1 and x != 0 and y == state_size-1:
 			lst = [(0,-1),(-1,0),(1,0)]
 			rm = []
@@ -231,7 +245,7 @@ class Sim_Annealing:
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -247,18 +261,22 @@ class Sim_Annealing:
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
+							# self.matrix[x][y].marked = True
 						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
+
 		else:
 			lst = [(0,-1),(-1,0),(1,0),(0,1)]
 			rm = []
+			# print x,y
 			for item in lst:
 
 				# print item
 				new_district = self.matrix[x + item[0]][y + item[1]].district_num
 				# print new_district
-				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district:
+				if self.matrix[x + item[0]][y + item[1]].dragon == self.matrix[x][y].dragon or old_district == new_district or self.matrix[x+item[0]][y+item[1]].marked:
 					# print item
 					rm.append(item)
 			for i in rm:
@@ -270,15 +288,20 @@ class Sim_Annealing:
 				offset = choice(lst)
 				# print offset
 				new_district = self.matrix[x + offset[0]][y + offset[1]].district_num
+				# print new_district,old_district
 				for i in range(0,len(self.district[new_district])):
-						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
+						# assert(self.district[new_district][i+1] == (x,y+1,self.matrix[x][y+1].dragon) or (x+1,y,self.matrix[x+1][y].dragon) or (x-1,y,self.matrix[x-1][y].dragon) or (x,y-1,self.matrix[x][y-1].dragon))
+						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon) and (x,y) in self.matrix[x + offset[0]][y + offset[1]].adjlst:
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
-						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
+							# self.matrix[x][y].marked = True
+						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon) and (x+offset[0],y+offset[1]) in self.matrix[x][y].adjlst:
 							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
-		
+							# self.matrix[x+offset[0]][y+offset[1]].marked = True
 
+		
+	def countDistricts(self,state_size):
 		# count majority districts
 		dragon_districts = 0
 		rabbit_districts = 0
@@ -296,15 +319,55 @@ class Sim_Annealing:
 				neutral_districs += 1
 			else:
 				rabbit_districts += 1
+		return (dragon_districts,rabbit_districts,neutral_districs)
+	def simulatedAnnealing(self,state_size,T,k):
+		# need to populate matrix before calling on self.district
+		ratio = self.populateMatrix(sys.argv[1],state_size)
+		# print ratio
+		rabbit_ratio = ratio[0]/100
+		district_locations = self.district
+		initial_district_count = self.countDistricts(state_size)
+		# print self.district[0]
+		# print initial_district_count
+		s = initial_district_count[1]/(state_size - initial_district_count[2])
+		Tmin = .0001
+		alpha = 0.1
+		equilibrium = 0
+		# search_num = 0
+		while T > Tmin:
+			while equilibrium != 10000:
+				# new_district_count = self.countDistricts(state_size)
+				self.generate_districts(state_size)
+				new_district_count = self.countDistricts(state_size)
+				# search_num += 1
+				s_prime = new_district_count[1]/(state_size-new_district_count[2])
+				# print s_prime
+				# want to get as close to the population as possible with fitness function
+				# print self.district
+				# print rabbit_ratio
+				# print 1 - (s_prime/rabbit_ratio), 1 - (s/rabbit_ratio)
+				if abs(1 - (s_prime/rabbit_ratio)) < abs(1 - (s/rabbit_ratio)):
+					s = s_prime 	#accept neighbor solution
+					# cache district locations
+					# print s
+					district_locations = self.district
+					dis_count = new_district_count
+					# print district_locations
+				else:
+					prob_sprime = math.exp(new_district_count[1]/(k * T)) 	# accept sprime w/probability  
+				equilibrium += 1
+			T = T * alpha
+		# for i in range(0,10):
+		# 	for j in range(0,10):
+		# 		print self.matrix[i][j].district_num
+		# print s,district_locations
+		return (district_locations,equilibrium,dis_count,ratio)
 			# else the district is rabbit
 		
-		district_display = 'Number of districts with a majority for each party:\n************************************* \nR:<{0}>\nD:<{1}> N:<{2}>'.format(rabbit_districts,dragon_districts,neutral_districs)
-		print district_display
-		return self.district
-
+		# district_display = 'Number of districts with a majority for each party:\n************************************* \nR:<{0}>\nD:<{1}> N:<{2}>'.format(rabbit_districts,dragon_districts,neutral_districs)
+		# print district_display
 	def populateMatrix(self,arg,state_size):
 		f = open(arg,'r')
-		print "File Name:", f.name
 		line = f.read()
 		line = line.replace(' ', '')
 		contents = line.split()
@@ -341,15 +404,17 @@ class Sim_Annealing:
 
 
 
+
 				node.district_num = i
+				node.marked = False
 				district_index = self.district[i]
 				district_index.append((i,j,node.dragon))
 		# print self.district
-
+		f.close()
 		percent_dragons = (num_dragons/(state_size * state_size)) * 100
 		percent_rabbits = 100 - percent_dragons
-		percent_display = "Party division in population: \n************************************* \nR:<% {0}>\nD:<% {1}>".format(percent_rabbits,percent_dragons)
-		print percent_display
+		return (percent_rabbits,percent_dragons)
+
 		# Generate Initial district partitions
 
 
@@ -363,11 +428,29 @@ class Sim_Annealing:
 # m.populateMatrix(sys.argv[1],10)
 # m = Sim_Annealing(10)
 # m.populateMatrix(sys.argv[1],10)
-m = Sim_Annealing(10)
-m.populateMatrix(sys.argv[1],10)
-for i in range(0,200):	
-	m.generate_districts(10)
-print m.district
+f = open(sys.argv[1],'r')
+line = f.read()
+line = line.replace(' ', '')
+contents = line.split()
+size = len(contents[0])
+f.close()
+
+m = Sim_Annealing(size)
+# m.populateMatrix(sys.argv[1],10)
+# for i in range(0,20):	
+# 	m.generate_districts(10)
+tuple = m.simulatedAnnealing(size,1000,1)
+# print m.matrix[0][0].district_num
+
+# population = m.populateMatrix(sys.argv[1],10)
+percent_display = "Party division in population: \n************************************* \nR:<% {0}>\nD:<% {1}>".format(tuple[3][0],tuple[3][1])
+print percent_display
+# run simulated annealing
+
+# count_districts = m.countDistricts(10)	
+
+district_display = 'Number of districts with a majority for each party:\n************************************* \nR:<{0}>\nD:<{1}>'.format(tuple[2][1],tuple[2][0])
+print district_display
 	
 
 
