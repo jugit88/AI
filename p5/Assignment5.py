@@ -319,14 +319,14 @@ class Sim_Annealing:
 				n_dist = self.district[new_district][:]
 				o_dist = self.district[old_district][:]
 				for i in range(0,len(self.district[new_district])):
-						# if ((n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]-1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]+1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]+1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]+1)):
-						# 	return
-						# if ((o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]-1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
-						# 	return
+						if ((n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]-1)
+						or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]+1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]+1)
+						or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]+1)):
+							return
+						if ((o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]-1)
+						or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
+						or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
+							return
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
@@ -362,15 +362,8 @@ class Sim_Annealing:
 				o_dist = self.district[old_district][:]
 
 				for i in range(1,len(self.district[new_district])):
-					if ((n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]-1)
-						or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]+1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]+1)
-						or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]+1)):
-							return
-					if ((o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]-1)
-						or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
-						or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
-							return
-					assert(self.district[new_district][i+1] == (x,y+1,self.matrix[x][y+1].dragon) or (x+1,y,self.matrix[x+1][y].dragon) or (x-1,y,self.matrix[x-1][y].dragon) or (x,y-1,self.matrix[x][y-1].dragon))
+			
+					# assert(self.district[new_district][i+1] == (x,y+1,self.matrix[x][y+1].dragon) or (x+1,y,self.matrix[x+1][y].dragon) or (x-1,y,self.matrix[x-1][y].dragon) or (x,y-1,self.matrix[x][y-1].dragon))
 					if self.district[new_district][i-1] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon) and (x,y) in self.matrix[x + offset[0]][y + offset[1]].adjlst:
 						self.district[new_district][i-1] = (x,y,self.matrix[x][y].dragon)
 						self.matrix[x][y].district_num = old_district
