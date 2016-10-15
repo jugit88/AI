@@ -22,10 +22,8 @@ class Sim_Annealing:
 		# check to see if the node is marked and the random index doesn't hit edge/corner cases
 		x = randint(0,state_size-1)
 		y = randint(0,state_size-1)
-		# print x,y
+
 		
-		
-		# print x,y
 		old_district = self.matrix[x][y].district_num
 		# print self.district[old_district]
 		# print self.district[old_district][:][:]
@@ -335,7 +333,7 @@ class Sim_Annealing:
 		equilibrium = 0
 		# search_num = 0
 		while T > Tmin:
-			while equilibrium != 10000:
+			while equilibrium != 1000:
 				# new_district_count = self.countDistricts(state_size)
 				self.generate_districts(state_size)
 				new_district_count = self.countDistricts(state_size)
@@ -439,20 +437,31 @@ m = Sim_Annealing(size)
 # m.populateMatrix(sys.argv[1],10)
 # for i in range(0,20):	
 # 	m.generate_districts(10)
-tuple = m.simulatedAnnealing(size,1000,1)
+tuple = m.simulatedAnnealing(size,100,10)
 # print m.matrix[0][0].district_num
 
 # population = m.populateMatrix(sys.argv[1],10)
-percent_display = "Party division in population: \n************************************* \nR:<% {0}>\nD:<% {1}>".format(tuple[3][0],tuple[3][1])
+percent_display = "Party division in population: \n************************************* \nR:<% {0}>\nD:<% {1}> \n************************************* \n".format(tuple[3][0],tuple[3][1])
 print percent_display
 # run simulated annealing
 
 # count_districts = m.countDistricts(10)	
 
-district_display = 'Number of districts with a majority for each party:\n************************************* \nR:<{0}>\nD:<{1}>'.format(tuple[2][1],tuple[2][0])
+district_display = 'Number of districts with a majority for each party:\n************************************* \nR:<{0}>\nD:<{1}> \n************************************* \n'.format(tuple[2][1],tuple[2][0])
 print district_display
-	
+location_array = [[0 for x in range(size)] for y in range(size)]
 
-
+for i in tuple[0]:
+	for j in range(0,size):
+		location_array[i][j] = tuple[0][i][:][j][:2]
+	# print location_array
+location_display = 'Locations assigned to each district \n************************************* \n District 1: {0}\n District 2: {1} \n District 3: {2} \n District 4: {3} \n District 5: {4} \n District 6: {5} \n District 7: {6} \n District 8: {7} \n'.format(location_array[0],location_array[1],location_array[2],location_array[3],location_array[4],location_array[5],location_array[6],location_array[7])
+if size == 8:
+	print location_display.replace('[','').replace(']','')
+else:
+	location_display1 = location_display + ' District 9: {0} \n District 10: {1}'.format(location_array[8],location_array[9]) 
+	print location_display1.replace('[','').replace(']','')
+state_display = '************************************* \n Algorithm applied:<SA> \n ************************************* \n \n ************************************* \n Number of search states explored:<{0}> \n ************************************* '.format(tuple[1])
+print state_display
 
 
