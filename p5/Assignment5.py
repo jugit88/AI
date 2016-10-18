@@ -20,6 +20,12 @@ class Sim_Annealing:
 	def generate_districts(self,state_size):
 		#generate neighboring solutions by checking edges and swapping them
 		# check to see if the node is marked and the random index doesn't hit edge/corner cases
+		# for i in self.district:
+		# 	distr = self.district[i]
+		# 	for j in range(1,len(self.district[i])):
+		# 		# print distr[j-1][0] + distr[j][0]
+		# 		if ((distr[j-1][0],distr[j-1][1]) == (distr[j][0],distr[j][1]-1) or (distr[j-1][0],distr[j-1][1]) == (distr[j][0]-1,distr[j][1]) or (distr[j-1][0],distr[j-1][1]) == (distr[j][0]-1,distr[j][1]-1) or (distr[j-1][0],distr[j-1][1]) == (distr[j][0],distr[j][1]+1) or (distr[j-1][0],distr[j-1][1]) == (distr[j][0]+1,distr[j][1]) or (distr[j-1][0],distr[j-1][1]) == (distr[j][0]+1,distr[j][1]+1) or (distr[j-1][0],distr[j-1][1]) == (distr[j][0]+1,distr[j][1]-1) or (distr[j-1][0],distr[j-1][1]) = (distr[j][0]-1,distr[j][1]+1)):
+		# 			print distr[j-1][0],distr[j-1][1],distr[j][0],distr[j][1]
 		x = randint(0,state_size-1)
 		y = randint(0,state_size-1)
 		while (self.matrix[x][y].marked):
@@ -279,14 +285,7 @@ class Sim_Annealing:
 				new_district = self.matrix[x + offset[0]][y + offset[1]].district_num
 				for i in range(0,len(self.district[new_district])):
 						
-						# if ((n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]-1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]+1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]+1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]+1)):
-						# 	return
-						# if ((o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]-1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
-						# or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
-						# 	return
+						
 						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
 							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
 							# print self.district[new_district][i]
@@ -318,21 +317,21 @@ class Sim_Annealing:
 				new_district = self.matrix[x + offset[0]][y + offset[1]].district_num
 				n_dist = self.district[new_district][:]
 				o_dist = self.district[old_district][:]
-				for i in range(0,len(self.district[new_district])):
+				for i in range(1,len(self.district[new_district])):
 						if ((n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]-1)
 						or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]+1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]+1)
 						or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]+1)):
 							return
 						if ((o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]-1)
-						or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
-						or (n_dist[i-1][0],n_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
+						or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
+						or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
 							return
-						if self.district[new_district][i] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
-							self.district[new_district][i] = (x,y,self.matrix[x][y].dragon)
+						if self.district[new_district][i-1] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon):
+							self.district[new_district][i-1] = (x,y,self.matrix[x][y].dragon)
 							self.matrix[x][y].district_num = old_district
 							self.matrix[x][y].marked = True
-						if self.district[old_district][i] == (x,y,self.matrix[x][y].dragon):
-							self.district[old_district][i] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
+						if self.district[old_district][i-1] == (x,y,self.matrix[x][y].dragon):
+							self.district[old_district][i-1] = (x+offset[0],y+offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon)
 							self.matrix[x+offset[0]][y+offset[1]].district_num = new_district
 							self.matrix[x+offset[0]][y+offset[1]].marked = True
 
@@ -361,9 +360,26 @@ class Sim_Annealing:
 				n_dist = self.district[new_district][:]
 				o_dist = self.district[old_district][:]
 
+				if y == 1 or y == 5 or y == 6 or y == 9 or y == 2 or y == 3:
+					for i in range(1,len(self.district[new_district])):
+						if ((n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]-1)
+							or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]+1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]+1)
+							or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]+1)):
+								return
+						if ((o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]-1)
+						or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
+						or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
+							return
+
 				for i in range(1,len(self.district[new_district])):
-			
-					# assert(self.district[new_district][i+1] == (x,y+1,self.matrix[x][y+1].dragon) or (x+1,y,self.matrix[x+1][y].dragon) or (x-1,y,self.matrix[x-1][y].dragon) or (x,y-1,self.matrix[x][y-1].dragon))
+					# if ((n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]-1)
+					# 	or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]-1,n_dist[i][1]+1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]-1) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]) or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0],n_dist[i][1]+1)
+					# 	or (n_dist[i-1][0],n_dist[i-1][1]) != (n_dist[i][0]+1,n_dist[i][1]+1)):
+					# 		return
+					# if ((o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]-1)
+					# or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]-1,o_dist[i][1]+1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]-1) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]) or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0],o_dist[i][1]+1)
+					# or (o_dist[i-1][0],o_dist[i-1][1]) != (o_dist[i][0]+1,o_dist[i][1]+1)):
+					# 	return
 					if self.district[new_district][i-1] == (x + offset[0],y + offset[1],self.matrix[x+offset[0]][y+offset[1]].dragon) and (x,y) in self.matrix[x + offset[0]][y + offset[1]].adjlst:
 						self.district[new_district][i-1] = (x,y,self.matrix[x][y].dragon)
 						self.matrix[x][y].district_num = old_district
@@ -408,11 +424,13 @@ class Sim_Annealing:
 		equilibrium = 0
 		search_states = []
 		# dis_count = initial_district_count
-		# search_num = 0
+		search_num = 0
 		while T > Tmin:
-			while equilibrium != 1000:
+			while equilibrium != 1004:
 				# new_district_count = self.countDistricts(state_size)
 				self.generate_districts(state_size)
+				if self.district != district_locations:
+					search_num += 1
 				new_district_count = self.countDistricts(state_size)
 				if new_district_count not in search_states:
 					search_states.append(new_district_count)
@@ -426,14 +444,14 @@ class Sim_Annealing:
 					initial_district_count = new_district_count
 					# print district_locations
 				else:
-					prob_sprime = math.exp(new_district_count[1]/(k * T)) 	# accept sprime w/probability  
+					prob_sprime = 1 - math.exp(-new_district_count[1]/(k * T)) 	# accept sprime w/probability  
 				equilibrium += 1
 			T = T * alpha
 		# for i in range(0,10):
 		# 	for j in range(0,10):
 		# 		print self.matrix[i][j].district_num
 		# print s,district_locations
-		return (district_locations,len(search_states),initial_district_count,ratio)
+		return (district_locations,equilibrium,initial_district_count,ratio)
 			# else the district is rabbit
 		
 		# district_display = 'Number of districts with a majority for each party:\n************************************* \nR:<{0}>\nD:<{1}> N:<{2}>'.format(rabbit_districts,dragon_districts,neutral_districs)
@@ -490,16 +508,6 @@ class Sim_Annealing:
 		# Generate Initial district partitions
 
 
-# n = Sim_Annealing(10)
-# n.populateMatrix(sys.argv[1],10)
-# n.generate_districts(10)
-# m = Sim_Annealing(10)
-# m.populateMatrix(sys.argv[1],10)
-# m.generate_districts(10)
-
-# m.populateMatrix(sys.argv[1],10)
-# m = Sim_Annealing(10)
-# m.populateMatrix(sys.argv[1],10)
 f = open(sys.argv[1],'r')
 line = f.read()
 line = line.replace(' ', '')
