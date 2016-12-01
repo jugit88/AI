@@ -9,6 +9,8 @@ class Graph:
 	   # self.parent = None
 	   self.solved = False
 	   self.distance = 0
+	   self.key = ''
+	   self.parent = None
 
 
 	def addVertex(self, value,estDist):
@@ -16,6 +18,8 @@ class Graph:
 		if value in self.vertices:
 			print "Vertex already exists"
 		else:
+			# a = Graph()
+			# a.key = value
 			self.vertices[value] = []
 			self.heurVal[value] = estDist
 
@@ -26,9 +30,13 @@ class Graph:
 			print("Not found.")
 	def addEdge(self, value1, value2,dist):
 		a = Graph()
+		b = Graph()
+		a.key = value1
+		b.key = value2
 		if value1 not in self.vertices or value2 not in self.vertices:
 			print "One or more vertices not found."
 		else:
+			# b = Graph()
 			adjlst = self.vertices[value1]
 			adjlst.append((value2,dist))
 	
@@ -43,39 +51,60 @@ class Graph:
 	# 	# print Min
 	# 	return Min
 
-	def Dijkstra(self,start,end):
+	'''def Dijkstra(self,start,end):
 		if start == None or end == None:
 			return
 		if self.vertices[start] == None:
 			return
+		startV = Graph()
+		endV = (Graph)
+		startV.key = start
+		endV.key = end
 		distance = 0
-		distList = []
 		solved = [start]
-		while (end not in solved):
+		while (not endV.solved):
 			minDist = sys.maxint
-			solvedV = None
+			solvedV = Graph()
+			solvedV.key = None
 			for s in solved:
-				if s == end:
-					break
-				minVertex = min(self.vertices[s])
-				dist1 = sys.maxint
-				# if vertex leads to dead end due to tiebreaker
-				if self.vertices[minVertex[0]] == []:
-					for v in self.vertices[s]:
-						if v[1] < dist1 and self.vertices[v[0]] != []:
-							dist = v[1]
-							minVertex = v
-				# minVertex = node.getMin(self.vertices[s])
-				if minVertex[0] not in solved:
-					dist = minVertex[1] + distance 
-					if (dist < minDist):
-						solvedV = minVertex[0]
-						minDist = dist
-						distance = dist
-						solved.append(solvedV)
-		return (solved,minDist)
-		# print solved
-		# print minDist					
+				for v in self.vertices[s]:
+					if (v[0] not in solved):
+						dist = v[1] + distance
+						if dist < minDist:
+							solvedV.key = v[0]
+							minDist = dist
+							parent = s
+		solvedV.distance = minDist
+		# 		if s == end:
+		# 			break
+		# 		minVertex = min(self.vertices[s])
+		# 		# print minVertex
+		# 		# New Addition to add for an undirected graph 
+		# 		# At the moment not working: need to check on this further
+		# 		if minVertex[0] in solved:
+		# 			for v in self.vertices[s]:
+		# 				if v[1] < dist1 and v[0] not in solved:
+		# 					dist1 = v[1]
+		# 					minVertex = v
+		# 		print self.vertices['B']
+
+		# 		# dist1 = sys.maxint
+		# 		# if vertex leads to dead end due to tiebreaker
+		# 		# if self.vertices[minVertex[0]] == []:
+		# 		# 	for v in self.vertices[s]:
+		# 		# 		if v[1] < dist and self.vertices[v[0]] != []:
+		# 		# 			dist = v[1]
+		# 		# 			minVertex = v
+		# 		if minVertex[0] not in solved:
+		# 			dist = minVertex[1] + distance 
+		# 			if (dist < minDist):
+		# 				solvedV = minVertex[0]
+		# 				minDist = dist
+		# 				distance = dist
+		# 				solved.append(solvedV)
+		# 				print solved, minDist
+		# return (solved,minDist)'''
+							
 
 	def getFn(self,node):
 		dist = sys.maxint
@@ -88,7 +117,7 @@ class Graph:
 			if i[0] == 'F':
 				dist = i[1] + self.heurVal[i[0]]
 				fPair = (i[0],dist,i[1])
-			if i[1] + self.heurVal[i[0]] < dist and self.vertices[i[0]] != []:
+			elif i[1] + self.heurVal[i[0]] < dist and self.vertices[i[0]] != []:
 				dist = i[1] + self.heurVal[i[0]]
 				fPair = (i[0],dist,i[1])
 		# print fPair
@@ -138,13 +167,14 @@ def fetchData():
 			vertex.append((contents[i][0],int(contents[i][2:])))
 		else:	
 			edge.append((contents[i][1],contents[i][3],int(contents[i][5])))
-			# edge.append((contents[i][3],contents[i][1],int(contents[i][5])))
-	# print edge
+			edge.append((contents[i][3],contents[i][1],int(contents[i][5])))
 	f.close()
 
 fetchData()
-g = Graph()
+print edge
+# print edge
 for i in range(0,len(vertex)):
+	g = Graph()
 	g.addVertex(vertex[i][0],vertex[i][1])
 for i in range(0,len(edge)):
 	g.addEdge(edge[i][0],edge[i][1],edge[i][2])
@@ -153,13 +183,16 @@ def prettyPrint():
 	dpath = g.Dijkstra('S','F')
 	dpath1 = str(dpath[0])
 	dpath1 = dpath1.replace(',',' ->')
+	dpath1 = dpath1.replace("'",'')
 	apath = g.aStar('S','F')
 	apath1 = str(apath[0])
 	apath1 = apath1.replace(',',' ->')
+	apath1 = apath1.replace("'", '')
 
-	print 'Shortest path Algorithms'
-	print 'Path | Nodes Evaluated'
-	print 'Dijkstra:',dpath1 + ' |', len(dpath[0])
-	print 'A*:', apath1 + ' |', len(apath[0])
-prettyPrint()
+	print 'Shortest Path Algorithms'
+	print 'Path | Distance | Nodes Evaluated'
+	print 'Dijkstra:',dpath1 + ' |', dpath[1],'|',len(dpath[0])
+	print 'A*:', apath1 + ' |', apath[1] ,'|',len(apath[0])
+# prettyPrint()
+# print g.Dijkstra('S','F')
 

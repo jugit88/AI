@@ -426,7 +426,7 @@ class Sim_Annealing:
 		# dis_count = initial_district_count
 		search_num = 0
 		while T > Tmin:
-			while equilibrium != 1004:
+			while equilibrium != 1050:
 				# new_district_count = self.countDistricts(state_size)
 				self.generate_districts(state_size)
 				if self.district != district_locations:
@@ -452,7 +452,7 @@ class Sim_Annealing:
 		# 		print self.matrix[i][j].district_num
 		# print s,district_locations
 		return (district_locations,equilibrium,initial_district_count,ratio)
-			# else the district is rabbit
+			# else the district is rabbitk
 		
 		# district_display = 'Number of districts with a majority for each party:\n************************************* \nR:<{0}>\nD:<{1}> N:<{2}>'.format(rabbit_districts,dragon_districts,neutral_districs)
 		# print district_display
