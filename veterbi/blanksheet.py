@@ -57,78 +57,49 @@ for i in states:
 tag_count[end] += 1
 word_tag_count[(end,end)] += 1
 # transition/emission probability 
-b = 1
-c = 0
+# initialize first index for emission probability
 e_prob[lines[0][1]][lines[0][0]] = 1
 e_check[(start,start)] = 1
 for i in range(1,len(lines)):
-	 if lines[i][0] == lines[i][1]:
+	 # emission probability
+	 if lines[i][0] == lines[i][1]: #edge case: words are also states, p = 1
 		e_prob[lines[i][1]][lines[i][0]] = 1
 		e_check[(lines[i][1],lines[i][0])] = 1
 
 	 else:
 	 	e_prob[lines[i][1]][lines[i][0]] = word_tag_count[lines[i]] / tag_count[lines[i][1]]
 	 	e_check[(lines[i][1],lines[i][0])] = 1
+	# transition probability 
 	 if (lines[i-1][1],lines[i][1]) not in t_check:
 	 	t_prob[lines[i-1][1]][lines[i][1]] = 1
 	 	t_check[(lines[i-1][1],lines[i][1])] = 1
 	 else:
-	 	t_prob[lines[i-1][1]][lines[i][1]] += 1
-# print t_prob['NN']['DT'] / tags.count('NN')
+	 	t_prob[lines[i-1][1]][lines[i][1]] += 1 #establish a counter
 
+# calculate actual transitions  
 for s in t_prob:
 	for s1 in t_prob[s]:
 		t_prob[s][s1] = t_prob[s][s1] / tag_count[s]
 
-#fill the rest of the values in for transition and emission
+#fill in the rest of the values not found in the file
+
+# transition
 for t in states:
 	for t1 in states:
 		if (t,t1) not in t_check:
 			t_prob[t][t1] = 0
-# for w in lines:
-# 	if w[0] not in set_words:
-# 		set_words.append(w[0])
-# # print len(set_words)
+# emissions
 for t in states:
 	for w in set_words:
 		if (t,w) not in e_check:
 			e_prob[t][w] = 0
-# print e_prob['DT']['This']
-# for st in states:
-# a = ['PDT', 'RBS', 'RBR', 'CD', 'EEEE', 'EX', 'IN', 'SSSS', 'MD', 'NNPS', '-RRB-', 'JJS', 'JJR', 'SYM', 'UH']
-# print len(a)
-# if ('This','RBS') in lines:
-# 	print 1
-	# print e_prob[st]['This']
-# for st in states:
 
-
-# tests
-# print t_prob['NN']['DT']
-# emission probability
-# for w in lines:
-# # 	# TODO: add other edge cases
-# # 	# if w[0] == w[1] and w not in s_check:	#word is also a state
-# # 	# 	e_prob[w[0]][w[1]] == 1
-# # 	# else:
-# 	e_prob[w[0]][w[1]] = lines.count(w) / tag_count[w[1]]
-	# s_check.append(w)
-# tests
-# print lines.count(('the','DT')) / tags.count('DT')
-# print t_prob
 
 def viterbi(obs, states, start_p, trans_p, emit_p):
     V = [{}]
-    # print emit_p[start][obs[0]]
-
     for st in states:
-        # if (st,obs[0]) in e_check:
-        # 	st
-        # else:
-        # 	emit_p[st][obs[0]] = 0
         V[0][st] = {"prob": start_p[st] * emit_p[st][obs[0]], "prev": None}
     # Run Viterbi when t > 0
-
     for t in range(1, len(obs)):
         V.append({})
         for st in states:
