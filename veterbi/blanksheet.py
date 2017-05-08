@@ -105,8 +105,7 @@ def viterbi(obs, states, start_p, trans_p, emit_p):
         for st in states:
             max_tr_prob = max(V[t-1][prev_st]["prob"]*trans_p[prev_st][st] for prev_st in states)
             for prev_st in states:
-                if V[t-1][prev_st]["prob"] * trans_p[prev_st][st] == max_tr_prob:
-                   
+                if V[t-1][prev_st]["prob"] * trans_p[prev_st][st] == max_tr_prob:  
                     max_prob = max_tr_prob * emit_p[st][obs[t]]
                     V[t][st] = {"prob": max_prob, "prev": prev_st}
                     break
@@ -121,6 +120,7 @@ def viterbi(obs, states, start_p, trans_p, emit_p):
     for st, data in V[-1].items():
         print st, data
         if data["prob"] == max_prob:
+            # print st
             opt.append(st)
             previous = st
             break
